@@ -87,7 +87,7 @@ class PathFinder:
                     queue.append(i)
         cNode:Node = self.nodes[endNode]
     
-        #バックトラック
+        #Backtrack
         s:list[str] = [endNode]
         while cNode.prevNode != None:
             cNode = cNode.prevNode
@@ -103,3 +103,38 @@ print(W.dijkstra("D","C"))
 print(W.dijkstra("E","F"))
 print(W.dijkstra("A","D"))
 
+
+G = np.array([
+    #A  B  C  D  E  F  G
+    [0, 0, 0, 0, 0, 0, 0], #A
+    [0, 0, 0, 0, 0, 0, 0], #B
+    [3, 0, 0, 0, 0, 0, 0], #C
+    [0, 1, 4, 0, 0, 0, 0], #D
+    [0, 2, 1, 0, 0, 0, 0], #E
+    [2, 6, 2, 0, 3, 0, 0], #F
+    [0, 2, 0, 0, 0, 5, 0]  #G
+])
+
+G += np.transpose(G)
+#GraphD class
+class GraphD:
+    def __init__(self) -> None:
+        #networkx object
+        self.G = n.DiGraph()
+#GraphD object
+graphD = GraphD()
+
+nodes = [chr(i).upper() for i in range(97,104)]
+graphD.G.add_nodes_from(nodes)
+for i in range(len(G)):
+    for j in range(len(G[0])):
+        if G[i][j] != 0:
+            graphD.G.add_weighted_edges_from([(nodes[i],nodes[j],G[i][j])])
+
+pos = n.spring_layout(graphD.G)
+fig = plt.figure()
+n.draw_networkx_nodes(graphD.G, pos, node_size=300)
+n.draw_networkx_edges(graphD.G, pos, width=2)
+n.draw_networkx_labels(graphD.G, pos, font_size=10, font_color="black")
+n.draw_networkx_edge_labels(graphD.G, pos, edge_labels={(i, j): w['weight'] for i, j, w in graphD.G.edges(data=True)})
+fig.savefig("result1.png",dpi = 500)
