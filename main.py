@@ -1,7 +1,4 @@
-import matplotlib.pyplot as plt
-import networkx as n 
-import numpy as np 
-from graphviz import Graph
+
 import os 
 
 os.system("pip install matplotlib")
@@ -9,6 +6,10 @@ os.system("pip install networkx")
 os.system("pip install numpy")
 os.system("pip install graphviz")
 
+import matplotlib.pyplot as plt
+import networkx as n 
+import numpy as np 
+from graphviz import Graph
 
 G = np.array([
     #A  B  C  D  E  F  G
