@@ -106,7 +106,7 @@ class PathFinder:
         for i in all_paths.keys():
             self.nodes[i[0]].adj[i[3]] = all_paths[i]
     
-    def dijkstra(self,startNode:str,endNode:str):
+    def search_path(self,startNode:str,endNode:str):
 
         #最短距離を無限大に初期化
         for i in self.nodes.keys():
