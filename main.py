@@ -83,23 +83,6 @@ class Node:
     def set_d(self,d:int) -> None:
         self.d = d 
 
-class Node:
-    def __init__(self,name:str) -> None:
-        self.name:str = name
-        self.adj:dict[str,int] = {}
-        self.d:float = float('inf')
-        self.explored:bool = False
-        self.prevNode:Node | None = None
-    
-    def __repr__(self) -> str:
-        return self.name
-
-    def set_explored(self,e:bool) -> None:
-        self.explored = e
-
-    def set_d(self,d:int) -> None:
-        self.d = d 
-
 class PathFinder:
     def __init__(self,all_paths:dict[str,int],nodes_string:list[str]) -> None:
         self.nodes_string: list[str] = nodes_string
