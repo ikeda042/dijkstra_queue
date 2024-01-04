@@ -1,7 +1,5 @@
 import random
 import numpy as np
-import matplotlib.pyplot as plt
-import networkx as n 
 from graphviz import Graph
 
 class AdjNode:
@@ -151,6 +149,13 @@ print(path_weights)
 W = PathFinder(path_weights,nodes)
 
 print(W.search_path("A","B"))
+print(W.search_path("A","C"))
+print(W.search_path("A","D"))
+print(W.search_path("A","E"))
+print(W.search_path("A","F"))
+print(W.search_path("A","G"))
+
+
 
 
 
