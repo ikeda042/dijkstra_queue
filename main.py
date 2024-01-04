@@ -1,6 +1,7 @@
 from graphviz import Graph
 from components import PathFinder, AdjNode, transpose, add_matrices, generate_random_G
 from typing import cast
+
 #隣接行列の生成
 G = generate_random_G(15)
 
