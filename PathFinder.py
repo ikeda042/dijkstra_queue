@@ -8,12 +8,9 @@ class AdjNode:
     def __init__(self, weight: int, is_Barrier_free: bool) -> None:
         self.weight: int = weight
         self.is_Barrier_free: bool = is_Barrier_free
-
-    def __add__(self, other):
-        return self.weight + other.weight
     
     def __repr__(self) -> str:
-        return f"{self.weight*1 if self.is_Barrier_free else self.weight*-1}"
+        return f"{self.weight}"
 
 def transpose(G:list[list[AdjNode]]) -> list[list[AdjNode]]:
     rows = len(G)
@@ -24,10 +21,24 @@ def transpose(G:list[list[AdjNode]]) -> list[list[AdjNode]]:
             G_T[j][i] = G[i][j]
     return G_T
 
+def add_matrices(G, T):
+    rows = len(G)
+    cols = len(G[0])
+    result = [[None for _ in range(cols)] for _ in range(rows)]
+    for i in range(rows):
+        for j in range(cols):
+            if G[i][j].weight != 0:
+                result[i][j] = G[i][j]
+            elif T[i][j].weight != 0:
+                result[i][j] = T[i][j]
+            else:
+                result[i][j] = G[i][j]
+    return result
+
 def generate_random_G(R:int) -> np.ndarray:
     random.seed(10)
     weights_cs = [0]*50 + [1]*4 + [2]*2 + [3]*2 + [3]*6 + [4]*3 + [5]*6
-    p = [-1]*5 + [1]*12
+    p = [-1]*5 + [1]*21
     def get_weight():
         return random.choice(weights_cs) * random.choice(p)
     G : list[AdjNode] = [[AdjNode(0,False) for i in range(R)] for j in range(R)]
@@ -40,24 +51,22 @@ def generate_random_G(R:int) -> np.ndarray:
             G[i][j].is_Barrier_free = True if w > 0 else False
     return  G
 
-G = generate_random_G(10)
+G = generate_random_G(15)
 
 GraphvizObject = Graph(format="png")
 GraphvizObject.attr("node", shape="circle")
 
-# name nodes from A to A+R
-G : list[AdjNode] = G + transpose(G)
+G : list[AdjNode] = add_matrices(G, transpose(G))
 nodes, path_weights = [str(chr(i).upper()) for i in range(97,len(G)+97)], {}
 
 for i in range(len(G)):
     for j in range(len(G[0])):
-        if G[i][j].weight != 0 :
+        if G[i][j].weight != 0:
+            path_weights[f"{nodes[i]}->{nodes[j]}"] = G[i][j]
             if i>j:
                 print(type(G[i][j]))
                 GraphvizObject.edge(str(nodes[i]),str(nodes[j]),label=str(G[i][j].weight),color='black' if G[i][j].is_Barrier_free else 'red')
-            path_weights[f"{nodes[i]}->{nodes[j]}"] = G[i][j]
 GraphvizObject.render("G")
-
 
 
 
@@ -79,8 +88,6 @@ class Node:
 
     def set_d(self,d:int) -> None:
         self.d = d 
-
-
 
 class Node:
     def __init__(self,name:str) -> None:
@@ -143,9 +150,11 @@ class PathFinder:
 
         return [s[::-1],self.nodes[endNode].d]
 
+path_weights = {i: path_weights[i].weight for i in path_weights.keys() if path_weights[i].is_Barrier_free}
+print(path_weights)
 W = PathFinder(path_weights,nodes)
 
 print(W.search_path("A","B"))
 
- 
+
 
