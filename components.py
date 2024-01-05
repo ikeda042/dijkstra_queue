@@ -72,8 +72,9 @@ class PathFinder:
         self.nodes_string: list[str] = nodes_string
         self.nodes:dict[str,Node] = {i:Node(i) for i in nodes_string}
         for i in all_paths.keys():
-            self.nodes[i[0]].adj[i[3]] = all_paths[i]
-    
+            self.nodes[i.split("->")[0]].adj[i.split("->")[1]] = all_paths[i]
+        print("##########")
+        print(self.nodes)
     def search_path(self,startNode:str,endNode:str):
 
         #最短距離を無限大に初期化

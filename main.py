@@ -13,8 +13,10 @@ GraphvizObject.attr("node", shape="circle")
 G : list[AdjNode] = add_matrices(G, transpose(G))
 
 #ノードの文字列を生成(例: A,B,C,D,E,F,G...) + 各エッジの重みを初期化
-nodes, path_weights = [str(chr(i).upper()) for i in range(97,len(G)+97)], {}
+letters = [str(chr(i).upper()) for i in range(97,123)]
 
+nodes, path_weights = [letters[i%len(letters)]+str(i//len(letters)) for i in range(len(G))], {}
+print(nodes)
 #GraphvizObjectにノード、エッジを追加
 for i in range(len(G)):
     for j in range(len(G[0])):
@@ -31,12 +33,7 @@ path_weights : dict[str,int] = {i: cast(AdjNode,path_weights[i]).weight for i in
 print(path_weights)
 W = PathFinder(path_weights,nodes)
 
-print(W.search_path("A","B"))
-print(W.search_path("A","C"))
-print(W.search_path("A","D"))
-print(W.search_path("A","E"))
-print(W.search_path("A","F"))
-print(W.search_path("A","G"))
+print(W.search_path("A0","B0"))
 
 
 
