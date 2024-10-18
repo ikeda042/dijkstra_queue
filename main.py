@@ -42,6 +42,6 @@ path_weights: dict[str, int] = {
     if cast(AdjNode, path_weights[i]).is_Barrier_free
 }
 print(path_weights)
-W = PathFinder(path_weights, nodes)
+W: PathFinder = PathFinder(path_weights, nodes)
 
 print(W.search_path("A0", "B0"))
