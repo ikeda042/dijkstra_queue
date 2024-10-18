@@ -44,4 +44,4 @@ path_weights: dict[str, int] = {
 print(path_weights)
 W: PathFinder = PathFinder(path_weights, nodes)
 
-print(W.search_path("A0", "B0"))
+print(W.search_path(startNode="A0", endNode="B0"))
