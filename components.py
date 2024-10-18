@@ -1,3 +1,4 @@
+from __future__ import annotations
 import random
 import numpy as np
 from typing import cast
@@ -10,50 +11,6 @@ class AdjNode:
 
     def __repr__(self) -> str:
         return f"{self.weight}"
-
-
-def transpose(G: list[list[AdjNode]]) -> list[list[AdjNode]]:
-    rows = len(G)
-    cols = len(G[0])
-    G_T = [[None for _ in range(rows)] for _ in range(cols)]
-    for i in range(rows):
-        for j in range(cols):
-            G_T[j][i] = G[i][j]
-    return G_T
-
-
-def add_matrices(G, T):
-    rows = len(G)
-    cols = len(G[0])
-    result = [[None for _ in range(cols)] for _ in range(rows)]
-    for i in range(rows):
-        for j in range(cols):
-            if cast(AdjNode, G[i][j]).weight != 0:
-                result[i][j] = G[i][j]
-            elif cast(AdjNode, T[i][j]).weight != 0:
-                result[i][j] = T[i][j]
-            else:
-                result[i][j] = G[i][j]
-    return result
-
-
-def generate_random_G(R: int) -> np.ndarray:
-    random.seed(10)
-    weights_cs = [0] * 50 + [1] * 4 + [2] * 2 + [3] * 2 + [3] * 6 + [4] * 3 + [5] * 6
-    p = [-1] * 5 + [1] * 21
-
-    def get_weight():
-        return random.choice(weights_cs) * random.choice(p)
-
-    G: list[AdjNode] = [[AdjNode(0, False) for i in range(R)] for j in range(R)]
-    for i in range(R):
-        for j in range(R):
-            if i == j or i < j:
-                continue
-            w = get_weight()
-            cast(AdjNode, G[i][j]).weight = abs(w)
-            cast(AdjNode, G[i][j]).is_Barrier_free = True if w > 0 else False
-    return G
 
 
 class Node:
@@ -72,6 +29,54 @@ class Node:
 
     def set_d(self, d: int) -> None:
         self.d = d
+
+
+class SyncChores:
+    @classmethod
+    def transpose(cls, G: list[list[AdjNode]]) -> list[list[AdjNode]]:
+        rows = len(G)
+        cols = len(G[0])
+        G_T = [[None for _ in range(rows)] for _ in range(cols)]
+        for i in range(rows):
+            for j in range(cols):
+                G_T[j][i] = G[i][j]
+        return G_T
+
+    @classmethod
+    def add_matrices(cls, G, T):
+        rows = len(G)
+        cols = len(G[0])
+        result = [[None for _ in range(cols)] for _ in range(rows)]
+        for i in range(rows):
+            for j in range(cols):
+                if cast(AdjNode, G[i][j]).weight != 0:
+                    result[i][j] = G[i][j]
+                elif cast(AdjNode, T[i][j]).weight != 0:
+                    result[i][j] = T[i][j]
+                else:
+                    result[i][j] = G[i][j]
+        return result
+
+    @classmethod
+    def generate_random_G(cls, R: int) -> np.ndarray:
+        random.seed(10)
+        weights_cs = (
+            [0] * 50 + [1] * 4 + [2] * 2 + [3] * 2 + [3] * 6 + [4] * 3 + [5] * 6
+        )
+        p = [-1] * 5 + [1] * 21
+
+        def get_weight():
+            return random.choice(weights_cs) * random.choice(p)
+
+        G: list[AdjNode] = [[AdjNode(0, False) for i in range(R)] for j in range(R)]
+        for i in range(R):
+            for j in range(R):
+                if i == j or i < j:
+                    continue
+                w = get_weight()
+                cast(AdjNode, G[i][j]).weight = abs(w)
+                cast(AdjNode, G[i][j]).is_Barrier_free = True if w > 0 else False
+        return G
 
 
 class PathFinder:
