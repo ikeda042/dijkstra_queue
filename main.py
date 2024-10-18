@@ -1,16 +1,16 @@
 from graphviz import Graph
-from components import PathFinder, AdjNode, transpose, add_matrices, generate_random_G
+from components import PathFinder, AdjNode, SyncChores
 from typing import cast
 
 # 隣接行列の生成
-G = generate_random_G(15)
+G = SyncChores.generate_random_G(15)
 
 # グラフインスタンスの初期化
 GraphvizObject = Graph(format="png")
 GraphvizObject.attr("node", shape="circle")
 
 # 隣接行列を無向グラフに変換
-G: list[AdjNode] = add_matrices(G, transpose(G))
+G: list[AdjNode] = SyncChores.add_matrices(G, SyncChores.transpose(G))
 
 # ノードの文字列を生成(例: A,B,C,D,E,F,G...) + 各エッジの重みを初期化
 letters = [str(chr(i).upper()) for i in range(97, 123)]
